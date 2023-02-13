@@ -3,23 +3,17 @@ const process = std.process;
 
 
 const Gnome = @import("vm.zig");
+const Tokenizer = @import("tokenizer.zig");
 const op = Gnome.op;
 
+
+
 pub fn main() !void {
-    var a: std.mem.Allocator = undefined;
+    var source = "20 + 3 * 3 ";
+
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
-
-
-    var arena = std.heap.ArenaAllocator.init(gpa.allocator());
-    defer arena.deinit();
-    a = arena.allocator();
-    var arg_it = try process.ArgIterator.initWithAllocator(a);
-    
-    _ = arg_it.skip();
-
-    const path = arg_it.next();
-    if (path) |value| 
-        std.debug.print("wowie: {s}\nvalue: {}", .{value, @TypeOf(value)});
-        
+    // std.debug.print("{s}", .{source});
+    var tokenizer = try Tokenizer.init(gpa.allocator(), source);
+    try tokenizer.lex();
+    tokenizer.tokens.debugPrint();
 }

@@ -163,11 +163,6 @@ test "ast" {
     }
 
 
-    
-    // if (root.left) |left| 
-    //     std.debug.print("{}\n", .{left});
-    // if (root.right) |right| 
-    //     std.debug.print("{}\n", .{right});
     const Gnome = @import("vm.zig");
     var code = std.ArrayList(u8).init(allocatorGPA);
     try root.emitCode(&code);
@@ -177,6 +172,5 @@ test "ast" {
     const answer = root.interpret();
 
     std.debug.print("\nThe answer = {d}\n", .{answer});
-
-
+    
 }
