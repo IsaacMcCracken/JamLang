@@ -1,26 +1,25 @@
 const std = @import("std");
+const process = std.process;
+
+
 const Gnome = @import("vm.zig");
 const op = Gnome.op;
 
 pub fn main() !void {
-        var code = [_]u8 {
-        //main(x)
-        op(.push), 9,
-        op(.call), 5,
-        op(.halt),
-
-        // sqaure(x)
-        op(.load), 1,
-        op(.load), 1,
-        op(.mul),
-        op(.halt)
-        
-    };
-
+    var a: std.mem.Allocator = undefined;
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
+    defer _ = gpa.deinit();
 
-    var vm = Gnome.init(allocator, code[0..code.len]);
 
-    try vm.run();
+    var arena = std.heap.ArenaAllocator.init(gpa.allocator());
+    defer arena.deinit();
+    a = arena.allocator();
+    var arg_it = try process.ArgIterator.initWithAllocator(a);
+    
+    _ = arg_it.skip();
+
+    const path = arg_it.next();
+    if (path) |value| 
+        std.debug.print("wowie: {s}\nvalue: {}", .{value, @TypeOf(value)});
+        
 }
