@@ -1,6 +1,6 @@
 # JamLang 
 
-![The Jam Programing Language logo](logo/logoText.svg)
+![The Jam Programing Language logo](logo/logoText.png)
 
 ### Description:
 
